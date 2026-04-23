@@ -1,0 +1,31 @@
+// 主色调 - 橙色系
+$primary: #F97316;
+$primary-hover: #EA580C;
+$primary-light: #FFF7ED;
+$primary-dark: #C2410C;
+
+// 中性色
+$text-primary: #1F2937;
+$text-secondary: #6B7280;
+$text-muted: #9CA3AF;
+$text-white: #FFFFFF;
+
+// 背景色
+$bg-white: #FFFFFF;
+$bg-light: #F9FAFB;
+$bg-gray: #F3F4F6;
+$bg-dark: #1F2937;
+
+// 边框色
+$border-light: #E5E7EB;
+$border-medium: #D1D5DB;
+
+// 功能色
+$success: #10B981;
+$warning: #F59E0B;
+$error: #EF4444;
+$info: #3B82F6;
+
+// 响应式断点 - 只有 Mobile 和 Desktop
+$breakpoint-mobile: 768px;
+$breakpoint-desktop: 769px;

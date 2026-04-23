@@ -1,0 +1,54 @@
+// 响应式 Mixin
+// 注意：变量在 vite.config.js 中通过 additionalData 全局注入
+
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 769px) {
+    @content;
+  }
+}
+
+// 容器最大宽度
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  
+  @include mobile {
+    padding: 0 16px;
+  }
+}
+
+// 响应式网格
+.responsive-grid {
+  display: grid;
+  gap: 24px;
+  
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+  
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// 响应式 Flex
+.responsive-flex {
+  display: flex;
+  gap: 24px;
+  
+  @include mobile {
+    flex-direction: column;
+  }
+  
+  @include desktop {
+    flex-direction: row;
+  }
+}
