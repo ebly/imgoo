@@ -1,7 +1,6 @@
 <template>
   <section id="tools-section" class="tools-section">
     <div class="section-header">
-      <p class="section-tag">{{ $t('tools.tag') || 'TOOLS' }}</p>
       <h2 class="section-title">{{ $t('tools.title') }}</h2>
       <p class="section-subtitle">{{ $t('tools.subtitle') }}</p>
     </div>
@@ -36,7 +35,7 @@ import FeatureCard from './FeatureCard.vue'
 
 <style scoped lang="scss">
 .tools-section {
-  padding: 80px 0;
+  padding: 40px 0;
   background: $bg-light;
   
   @include mobile {

@@ -10,6 +10,14 @@ export const useImageStore = defineStore('image', () => {
   const progress = ref(0)
   const quality = ref(60)
   const outputFormat = ref('original')
+  const resizePercent = ref(100)
+  const isZipMode = ref(false)
+  const zipFileName = ref('')
+  const firstImageFile = ref(null)
+  const zipImageCount = ref(0)
+  const zipExtractedFiles = ref([])
+  
+  const fileProgress = ref({})
   
   // 配置
   const MAX_FILES = 20
@@ -74,6 +82,13 @@ export const useImageStore = defineStore('image', () => {
   
   function removeFile(index) {
     files.value.splice(index, 1)
+    if (files.value.length === 0) {
+      isZipMode.value = false
+      zipFileName.value = ''
+      firstImageFile.value = null
+      zipImageCount.value = 0
+      zipExtractedFiles.value = []
+    }
   }
   
   function clearFiles() {
@@ -81,6 +96,13 @@ export const useImageStore = defineStore('image', () => {
     results.value = []
     errors.value = []
     progress.value = 0
+    fileProgress.value = {}
+    resizePercent.value = 100
+    isZipMode.value = false
+    zipFileName.value = ''
+    firstImageFile.value = null
+    zipImageCount.value = 0
+    zipExtractedFiles.value = []
   }
   
   function setProcessing(value) {
@@ -89,6 +111,38 @@ export const useImageStore = defineStore('image', () => {
   
   function setProgress(value) {
     progress.value = value
+  }
+  
+  function setFileProgress(name, value) {
+    fileProgress.value = { ...fileProgress.value, [name]: value }
+  }
+  
+  function clearFileProgress(name) {
+    const updated = { ...fileProgress.value }
+    delete updated[name]
+    fileProgress.value = updated
+  }
+  
+  function clearAllFileProgress() {
+    fileProgress.value = {}
+  }
+  
+  function setZipMode(value, fileName) {
+    isZipMode.value = value
+    zipFileName.value = value ? fileName : ''
+  }
+  
+  function setFirstImageFile(file) {
+    firstImageFile.value = file
+  }
+  
+  function setZipExtractedFiles(files, count) {
+    zipExtractedFiles.value = files
+    zipImageCount.value = count
+  }
+  
+  function setFiles(newFiles) {
+    files.value = newFiles
   }
   
   function addResult(result) {
@@ -102,6 +156,7 @@ export const useImageStore = defineStore('image', () => {
   function clearResults() {
     results.value = []
     errors.value = []
+    fileProgress.value = {}
   }
   
   return {
@@ -110,8 +165,15 @@ export const useImageStore = defineStore('image', () => {
     errors,
     processing,
     progress,
+    fileProgress,
     quality,
     outputFormat,
+    resizePercent,
+    isZipMode,
+    zipFileName,
+    firstImageFile,
+    zipImageCount,
+    zipExtractedFiles,
     MAX_FILES,
     MAX_FILE_SIZE,
     MAX_TOTAL_SIZE,
@@ -120,9 +182,16 @@ export const useImageStore = defineStore('image', () => {
     processedCount,
     addFiles,
     removeFile,
+    setFiles,
     clearFiles,
     setProcessing,
     setProgress,
+    setFileProgress,
+    clearFileProgress,
+    clearAllFileProgress,
+    setZipMode,
+    setFirstImageFile,
+    setZipExtractedFiles,
     addResult,
     addError,
     clearResults

@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useImageCompress } from './useImageCompress'
 import { useImageStore } from '../stores/imageStore'
+import JSZip from 'jszip'
 
 export function useBatchProcessor() {
   const { compressImage } = useImageCompress()
@@ -8,12 +9,25 @@ export function useBatchProcessor() {
   
   const BATCH_SIZE = 5
   
+  const createZipFromResults = async (results) => {
+    const zip = new JSZip()
+    const folder = zip.folder('compressed_images')
+    
+    for (const result of results) {
+      const arrayBuffer = await result.compressedFile.arrayBuffer()
+      folder.file(result.compressedFile.name, arrayBuffer)
+    }
+    
+    const blob = await zip.generateAsync({ type: 'blob' })
+    return blob
+  }
+  
   const processBatch = async (compressOptions) => {
     store.setProcessing(true)
     store.setProgress(0)
     store.clearResults()
     
-    const files = [...store.files]
+    const files = store.isZipMode ? [...store.zipExtractedFiles] : [...store.files]
     const totalFiles = files.length
     
     if (totalFiles === 0) {
@@ -22,6 +36,9 @@ export function useBatchProcessor() {
     }
     
     let processedCount = 0
+    let totalOriginalSize = 0
+    let totalCompressedSize = 0
+    const allResults = []
     
     // 分批处理
     for (let i = 0; i < totalFiles; i += BATCH_SIZE) {
@@ -29,7 +46,11 @@ export function useBatchProcessor() {
       
       const batchResults = await Promise.allSettled(
         batch.map(async (file) => {
-          const result = await compressImage(file, compressOptions)
+          const result = await compressImage(file, {
+            ...compressOptions,
+            onProgress: (p) => store.setFileProgress(file.name, Math.round(p))
+          })
+          store.clearFileProgress(file.name)
           return { file, result }
         })
       )
@@ -37,7 +58,9 @@ export function useBatchProcessor() {
       batchResults.forEach((item) => {
         if (item.status === 'fulfilled') {
           if (item.value.result.success) {
-            store.addResult(item.value.result)
+            allResults.push(item.value.result)
+            totalOriginalSize += item.value.result.originalSize
+            totalCompressedSize += item.value.result.compressedSize
           } else {
             store.addError({
               file: item.value.file.name,
@@ -57,6 +80,29 @@ export function useBatchProcessor() {
       
       // 给 UI 一些渲染时间
       await new Promise(resolve => setTimeout(resolve, 50))
+    }
+    
+    // ZIP 模式：打包成单个 ZIP 文件
+    if (store.isZipMode && allResults.length > 0) {
+      const zipBlob = await createZipFromResults(allResults)
+      const zipName = store.zipFileName.replace('.zip', '_compressed.zip')
+      const zipFile = new File([zipBlob], zipName, { type: 'application/zip' })
+      const ratio = ((1 - totalCompressedSize / totalOriginalSize) * 100).toFixed(2)
+      
+      store.addResult({
+        success: true,
+        originalFile: store.files[0],
+        compressedFile: zipFile,
+        originalSize: totalOriginalSize,
+        compressedSize: zipBlob.size,
+        ratio: `${ratio}%`,
+        originalUrl: URL.createObjectURL(store.files[0]),
+        compressedUrl: URL.createObjectURL(zipFile),
+        isZipResult: true,
+        imageCount: allResults.length
+      })
+    } else {
+      allResults.forEach(r => store.addResult(r))
     }
     
     store.setProcessing(false)

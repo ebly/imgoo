@@ -1,21 +1,28 @@
 <template>
   <div 
     class="upload-area"
-    :class="{ 'is-dragover': isDragover }"
+    :class="{ 'is-dragover': isDragover, 'is-zip-mode': store.isZipMode }"
     @dragover.prevent="handleDragover"
     @dragleave="handleDragleave"
     @drop.prevent="handleDrop"
     @click="triggerFileInput"
   >
     <el-icon class="upload-icon"><UploadFilled /></el-icon>
-    <p class="upload-text">{{ $t('hero.dragDrop') }}</p>
-    <p class="upload-hint">{{ $t('hero.dragDropHint') }}</p>
+    <p class="upload-text">{{ store.isZipMode ? $t('upload.zipModeActive') : $t('hero.dragDrop') }}</p>
+    <p class="upload-hint">{{ store.isZipMode ? $t('upload.zipModeHint') : $t('hero.dragDropHint') }}</p>
     <input 
       ref="fileInput"
       type="file" 
       multiple 
       accept="image/*"
       @change="handleFileSelect"
+      class="file-input"
+    />
+    <input 
+      ref="zipFileInput"
+      type="file" 
+      accept=".zip"
+      @change="handleZipSelect"
       class="file-input"
     />
   </div>
@@ -27,18 +34,26 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { useImageStore } from '@/stores/imageStore'
+import { useZipHandler } from '@/composables/useZipHandler'
 import { validateFiles } from '@/utils/validators'
 
 const { t } = useI18n()
 const store = useImageStore()
+const { isZipFile, extractImagesFromZip } = useZipHandler()
 
 const fileInput = ref(null)
+const zipFileInput = ref(null)
 const isDragover = ref(false)
 
 const emit = defineEmits(['files-selected'])
 
 const triggerFileInput = () => {
-  fileInput.value?.click()
+  if (store.isZipMode) return
+  if (store.files.length === 0) {
+    zipFileInput.value?.click()
+  } else {
+    fileInput.value?.click()
+  }
 }
 
 const handleDragover = () => {
@@ -58,16 +73,37 @@ const handleDrop = (e) => {
 const handleFileSelect = (e) => {
   const files = Array.from(e.target.files)
   processFiles(files)
-  // 清空 input 以便重复选择相同文件
   e.target.value = ''
 }
 
-const processFiles = (files) => {
+const handleZipSelect = (e) => {
+  const files = Array.from(e.target.files)
+  e.target.value = ''
+  if (files.length > 0) {
+    processFiles(files)
+  }
+}
+
+const processFiles = async (files) => {
   if (files.length === 0) return
+  
+  if (store.isZipMode) {
+    ElMessage.warning(t('upload.zipModeLocked'))
+    return
+  }
+  
+  const zipFile = files.find(isZipFile)
+  if (zipFile) {
+    if (files.length > 1) {
+      ElMessage.warning(t('upload.zipOnlyOne'))
+      return
+    }
+    await processZipFile(zipFile)
+    return
+  }
   
   const { validFiles, errors } = validateFiles(files, store.files)
   
-  // 显示错误信息
   errors.forEach(error => {
     ElMessage.warning(t(`upload.${error.message}`, { name: error.file }))
   })
@@ -77,6 +113,28 @@ const processFiles = (files) => {
     emit('files-selected', validFiles)
     ElMessage.success(t('upload.selected', { count: validFiles.length }))
   }
+}
+
+const processZipFile = async (zipFile) => {
+  const result = await extractImagesFromZip(zipFile)
+  
+  if (result.error) {
+    if (result.error === 'maxFilesInZip') {
+      ElMessage.error(t('upload.zipTooManyFiles', { count: result.count }))
+    } else if (result.error === 'noImagesInZip') {
+      ElMessage.error(t('upload.zipNoImages'))
+    } else {
+      ElMessage.error(t('upload.zipInvalid'))
+    }
+    return
+  }
+  
+  store.setZipMode(true, zipFile.name)
+  store.setFirstImageFile(result.firstFile)
+  store.setZipExtractedFiles(result.files, result.count)
+  store.setFiles([zipFile])
+  emit('files-selected', result.files)
+  ElMessage.success(t('upload.zipLoaded', { count: result.count, name: zipFile.name }))
 }
 </script>
 
@@ -93,6 +151,16 @@ const processFiles = (files) => {
   &:hover, &.is-dragover {
     border-color: $primary;
     background: $primary-light;
+  }
+  
+  &.is-zip-mode {
+    cursor: not-allowed;
+    opacity: 0.7;
+    
+    &:hover {
+      border-color: $border-medium;
+      background: $bg-white;
+    }
   }
   
   @include mobile {

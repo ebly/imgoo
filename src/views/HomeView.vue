@@ -1,5 +1,6 @@
 <template>
   <div class="home-view">
+    <IntroSection />
     <HeroSection />
     <ToolsSection />
     <FormatsSection />
@@ -8,6 +9,7 @@
 </template>
 
 <script setup>
+import IntroSection from '@/components/home/IntroSection.vue'
 import HeroSection from '@/components/home/HeroSection.vue'
 import ToolsSection from '@/components/home/ToolsSection.vue'
 import FormatsSection from '@/components/home/FormatsSection.vue'

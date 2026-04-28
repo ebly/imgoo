@@ -30,7 +30,6 @@
         <div class="footer-column">
           <h4>{{ $t('footer.company') }}</h4>
           <ul>
-            <li><a href="#">{{ $t('footer.about') }}</a></li>
             <li><a href="#">{{ $t('footer.contact') }}</a></li>
             <li><a href="#">{{ $t('footer.privacy') }}</a></li>
           </ul>

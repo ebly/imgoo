@@ -15,9 +15,6 @@
             <span class="nav-link" @click="scrollToTools">{{ $t('header.tools') }}</span>
           </el-menu-item>
           <el-menu-item index="3">
-            <span class="nav-link" @click="scrollToFormats">{{ $t('header.about') }}</span>
-          </el-menu-item>
-          <el-menu-item index="4">
             <span class="nav-link" @click="scrollToContact">{{ $t('header.contact') }}</span>
           </el-menu-item>
         </el-menu>
@@ -61,8 +58,7 @@
       <el-menu>
         <el-menu-item index="1">{{ $t('header.home') }}</el-menu-item>
         <el-menu-item index="2" @click="scrollToToolsAndClose">{{ $t('header.tools') }}</el-menu-item>
-        <el-menu-item index="3" @click="scrollToFormatsAndClose">{{ $t('header.about') }}</el-menu-item>
-        <el-menu-item index="4" @click="scrollToContactAndClose">{{ $t('header.contact') }}</el-menu-item>
+        <el-menu-item index="3" @click="scrollToContactAndClose">{{ $t('header.contact') }}</el-menu-item>
       </el-menu>
     </el-drawer>
   </header>
@@ -98,13 +94,6 @@ const scrollToTools = () => {
   }
 }
 
-const scrollToFormats = () => {
-  const formatsSection = document.getElementById('formats-section')
-  if (formatsSection) {
-    formatsSection.scrollIntoView({ behavior: 'smooth' })
-  }
-}
-
 const scrollToContactAndClose = () => {
   mobileMenuVisible.value = false
   setTimeout(() => {
@@ -116,13 +105,6 @@ const scrollToToolsAndClose = () => {
   mobileMenuVisible.value = false
   setTimeout(() => {
     scrollToTools()
-  }, 300)
-}
-
-const scrollToFormatsAndClose = () => {
-  mobileMenuVisible.value = false
-  setTimeout(() => {
-    scrollToFormats()
   }, 300)
 }
 </script>
