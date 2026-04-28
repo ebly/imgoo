@@ -20,13 +20,11 @@ const handleFilesSelected = (files) => {
 .hero-container {
   display: flex;
   justify-content: center;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
 .hero-right {
   width: 100%;
-  max-width: 600px;
 }
 </style>
