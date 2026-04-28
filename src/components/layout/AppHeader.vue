@@ -11,9 +11,15 @@
       <nav class="desktop-nav" v-if="isDesktop">
         <el-menu mode="horizontal" :ellipsis="false">
           <el-menu-item index="1">{{ $t('header.home') }}</el-menu-item>
-          <el-menu-item index="2">{{ $t('header.tools') }}</el-menu-item>
-          <el-menu-item index="3">{{ $t('header.about') }}</el-menu-item>
-          <el-menu-item index="4">{{ $t('header.contact') }}</el-menu-item>
+          <el-menu-item index="2">
+            <span class="nav-link" @click="scrollToTools">{{ $t('header.tools') }}</span>
+          </el-menu-item>
+          <el-menu-item index="3">
+            <span class="nav-link" @click="scrollToFormats">{{ $t('header.about') }}</span>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <span class="nav-link" @click="scrollToContact">{{ $t('header.contact') }}</span>
+          </el-menu-item>
         </el-menu>
       </nav>
       
@@ -52,11 +58,11 @@
           <span>Imgoo</span>
         </div>
       </template>
-      <el-menu @select="mobileMenuVisible = false">
+      <el-menu>
         <el-menu-item index="1">{{ $t('header.home') }}</el-menu-item>
-        <el-menu-item index="2">{{ $t('header.tools') }}</el-menu-item>
-        <el-menu-item index="3">{{ $t('header.about') }}</el-menu-item>
-        <el-menu-item index="4">{{ $t('header.contact') }}</el-menu-item>
+        <el-menu-item index="2" @click="scrollToToolsAndClose">{{ $t('header.tools') }}</el-menu-item>
+        <el-menu-item index="3" @click="scrollToFormatsAndClose">{{ $t('header.about') }}</el-menu-item>
+        <el-menu-item index="4" @click="scrollToContactAndClose">{{ $t('header.contact') }}</el-menu-item>
       </el-menu>
     </el-drawer>
   </header>
@@ -76,6 +82,48 @@ const mobileMenuVisible = ref(false)
 const handleLanguageChange = (command) => {
   locale.value = command
   localStorage.setItem('locale', command)
+}
+
+const scrollToContact = () => {
+  const contactSection = document.getElementById('contact-section')
+  if (contactSection) {
+    contactSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+const scrollToTools = () => {
+  const toolsSection = document.getElementById('tools-section')
+  if (toolsSection) {
+    toolsSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+const scrollToFormats = () => {
+  const formatsSection = document.getElementById('formats-section')
+  if (formatsSection) {
+    formatsSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+const scrollToContactAndClose = () => {
+  mobileMenuVisible.value = false
+  setTimeout(() => {
+    scrollToContact()
+  }, 300)
+}
+
+const scrollToToolsAndClose = () => {
+  mobileMenuVisible.value = false
+  setTimeout(() => {
+    scrollToTools()
+  }, 300)
+}
+
+const scrollToFormatsAndClose = () => {
+  mobileMenuVisible.value = false
+  setTimeout(() => {
+    scrollToFormats()
+  }, 300)
 }
 </script>
 

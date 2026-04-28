@@ -10,6 +10,7 @@ declare module 'vue' {
     AppFooter: typeof import('./components/layout/AppFooter.vue')['default']
     AppHeader: typeof import('./components/layout/AppHeader.vue')['default']
     BatchSummary: typeof import('./components/common/BatchSummary.vue')['default']
+    ContactSection: typeof import('./components/home/ContactSection.vue')['default']
     ControlPanel: typeof import('./components/home/ControlPanel.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']

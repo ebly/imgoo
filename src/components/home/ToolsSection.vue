@@ -1,5 +1,5 @@
 <template>
-  <section class="tools-section">
+  <section id="tools-section" class="tools-section">
     <div class="section-header">
       <p class="section-tag">{{ $t('tools.tag') || 'TOOLS' }}</p>
       <h2 class="section-title">{{ $t('tools.title') }}</h2>

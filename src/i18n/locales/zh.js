@@ -11,7 +11,7 @@ export default {
     subtitle: '轻松调整大小、压缩和转换图片为你需要的格式。快速、免费、安全。',
     chooseImage: '选择图片',
     learnMore: '了解更多',
-    privacy: '你的图片是私密和安全的',
+    privacy: '保证图片的隐私和安全性',
     dragDrop: '拖拽图片到这里，或点击选择文件',
     dragDropHint: '支持 JPG、PNG、WebP、GIF 格式，单张最大 20MB',
     convertImage: '转换图片'
@@ -26,10 +26,12 @@ export default {
     formatJpeg: 'JPEG',
     formatPng: 'PNG',
     formatWebp: 'WebP',
-    startCompress: '开始压缩',
+    compress: '压缩',
+    compressAll: '压缩全部',
     processing: '处理中...',
     reset: '重置',
-    progress: '正在处理 {processed} / {total} 张图片'
+    progress: '正在处理 {processed} / {total} 张图片',
+    settings: '设置'
   },
   tools: {
     title: '强大的图片工具',
@@ -87,15 +89,20 @@ export default {
     maxFilesExceeded: '最多只能处理 20 张图片',
     invalidType: '请选择图片文件',
     remove: '移除',
-    selected: '已选择 {count} 张图片'
+    selected: '已选择 {count} 张图片',
+    noFiles: '请先选择图片',
+    emptyHint: '请选择或拖拽图片到这里'
   },
   preview: {
     original: '原图',
-    compressed: '压缩后',
+    compressed: '已压缩 {count} 张图片',
     fileSize: '文件大小',
     dimensions: '尺寸',
     ratio: '压缩率',
-    download: '下载'
+    download: '下载',
+    downloadAll: '下载全部',
+    noResults: '没有可下载的图片',
+    downloadSuccess: '开始下载'
   },
   common: {
     loading: '加载中...',
@@ -104,5 +111,23 @@ export default {
     cancel: '取消',
     confirm: '确认',
     close: '关闭'
+  },
+  contact: {
+    title: '联系我们',
+    subtitle: '有任何问题或建议？发送消息给我们，我们会尽快回复你。',
+    email: '邮箱地址',
+    namePlaceholder: '请输入你的姓名',
+    emailPlaceholder: '请输入你的邮箱',
+    subjectPlaceholder: '请输入主题',
+    messagePlaceholder: '请输入你的消息...',
+    send: '发送邮件',
+    nameRequired: '请输入姓名',
+    emailRequired: '请输入邮箱',
+    emailInvalid: '请输入有效的邮箱地址',
+    subjectRequired: '请输入主题',
+    messageRequired: '请输入消息',
+    success: '邮件发送成功',
+    error: '邮件发送失败，请重试',
+    alreadySubmitted: '今天已经发送过了，请明天再试'
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <section class="formats-section">
+  <section id="formats-section" class="formats-section">
     <div class="formats-container">
       <div class="formats-content">
         <h2 class="formats-title">{{ $t('formats.title') }}</h2>

@@ -11,7 +11,7 @@ export default {
     subtitle: 'Easily resize, compress, and convert your images to the format you need. Fast, free, and secure.',
     chooseImage: 'Choose Image',
     learnMore: 'Learn More',
-    privacy: 'Your images are private and secure',
+    privacy: 'Ensure image privacy and security',
     dragDrop: 'Drag & drop images here, or click to select files',
     dragDropHint: 'Supports JPG, PNG, WebP, GIF formats, max 20MB per file',
     convertImage: 'Convert Image'
@@ -26,10 +26,12 @@ export default {
     formatJpeg: 'JPEG',
     formatPng: 'PNG',
     formatWebp: 'WebP',
-    startCompress: 'Start Compression',
+    compress: 'Compress',
+    compressAll: 'Compress All',
     processing: 'Processing...',
     reset: 'Reset',
-    progress: 'Processing {processed} / {total} images'
+    progress: 'Processing {processed} / {total} images',
+    settings: 'Settings'
   },
   tools: {
     title: 'Powerful Image Tools',
@@ -87,15 +89,20 @@ export default {
     maxFilesExceeded: 'Maximum 20 images allowed',
     invalidType: 'Please select image files',
     remove: 'Remove',
-    selected: '{count} images selected'
+    selected: '{count} images selected',
+    noFiles: 'Please select images first',
+    emptyHint: 'Please select or drag images here'
   },
   preview: {
     original: 'Original',
-    compressed: 'Compressed',
+    compressed: 'Compressed {count} images',
     fileSize: 'File Size',
     dimensions: 'Dimensions',
     ratio: 'Compression Ratio',
-    download: 'Download'
+    download: 'Download',
+    downloadAll: 'Download',
+    noResults: 'No images to download',
+    downloadSuccess: 'Downloading started'
   },
   common: {
     loading: 'Loading...',
@@ -104,5 +111,23 @@ export default {
     cancel: 'Cancel',
     confirm: 'Confirm',
     close: 'Close'
+  },
+  contact: {
+    title: 'Contact Us',
+    subtitle: 'Have questions or feedback? Send us a message and we will get back to you soon.',
+    email: 'Email Address',
+    namePlaceholder: 'Enter your name',
+    emailPlaceholder: 'Enter your email',
+    subjectPlaceholder: 'Enter subject',
+    messagePlaceholder: 'Enter your message...',
+    send: 'Send Email',
+    nameRequired: 'Please enter your name',
+    emailRequired: 'Please enter your email',
+    emailInvalid: 'Please enter a valid email address',
+    subjectRequired: 'Please enter subject',
+    messageRequired: 'Please enter your message',
+    success: 'Email sent successfully',
+    error: 'Failed to send email, please try again',
+    alreadySubmitted: 'Already sent today, please try again tomorrow'
   }
 }

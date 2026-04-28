@@ -8,6 +8,8 @@ export const useImageStore = defineStore('image', () => {
   const errors = ref([])
   const processing = ref(false)
   const progress = ref(0)
+  const quality = ref(60)
+  const outputFormat = ref('original')
   
   // 配置
   const MAX_FILES = 20
@@ -108,6 +110,8 @@ export const useImageStore = defineStore('image', () => {
     errors,
     processing,
     progress,
+    quality,
+    outputFormat,
     MAX_FILES,
     MAX_FILE_SIZE,
     MAX_TOTAL_SIZE,
