@@ -5,6 +5,12 @@ export default {
     about: 'About',
     contact: 'Contact'
   },
+  workspace: {
+    back: 'Back to Home',
+    comingSoon: 'Coming Soon',
+    videoComingSoonDesc: 'Video compression is under development. Stay tuned!',
+    moreComing: 'More tools coming soon...'
+  },
   hero: {
     tag: 'ALL-IN-ONE',
     title: 'Resize, Compress & Convert Images',
@@ -41,6 +47,21 @@ export default {
   tools: {
     title: 'Powerful Image Tools',
     subtitle: 'All the tools you need to optimize your images',
+    imageCompress: {
+      title: 'Image Compress',
+      desc: 'Reduce image file size while maintaining quality',
+      action: 'Get Started'
+    },
+    videoCompress: {
+      title: 'Video Compress',
+      desc: 'Compress video files, reduce file size',
+      action: 'Get Started'
+    },
+    videoToGif: {
+      title: 'Video to GIF',
+      desc: 'Convert video to animated GIF',
+      action: 'Get Started'
+    },
     resize: {
       title: 'Resize Image',
       desc: 'Change image dimensions by pixels or percentage',
@@ -125,7 +146,8 @@ export default {
     success: 'Success',
     cancel: 'Cancel',
     confirm: 'Confirm',
-    close: 'Close'
+    close: 'Close',
+    remove: 'Remove'
   },
   contact: {
     title: 'Contact Us',
@@ -144,5 +166,39 @@ export default {
     success: 'Email sent successfully',
     error: 'Failed to send email, please try again',
     alreadySubmitted: 'Already sent today, please try again tomorrow'
+  },
+  videoToGif: {
+    title: 'Video to GIF',
+    step1: 'Upload Video',
+    step2: 'Preview & Clip',
+    step3: 'Frame Parameters',
+    step4: 'Generate GIF',
+    dropHint: 'Drag & drop MP4 video here, or click to select',
+    selectFile: 'Select Video File',
+    clipRange: 'Clip Range',
+    duration: 'Duration',
+    setStart: 'Set Start',
+    setEnd: 'Set End',
+    playClip: 'Play Clip',
+    stopClip: 'Stop',
+    loop: 'Loop',
+    frameInterval: 'Frame Interval',
+    frameIntervalHint: 'Take every Nth frame, larger = fewer frames',
+    gifQuality: 'GIF Quality',
+    gifQualityHint: '1-30, higher is better quality',
+    outputWidth: 'Output Width',
+    frameDelay: 'Frame Delay',
+    estimate: 'Estimated',
+    framesCount: 'frames',
+    extract: 'Extract Frames',
+    extracting: 'Extracting...',
+    framesTitle: 'Frames ({count})',
+    clearAll: 'Clear All',
+    generate: 'Generate GIF',
+    generatingProgress: 'Generating ({current}/{total})',
+    preview: 'GIF Preview',
+    resultInfo: 'File size: {size}',
+    resultFrames: '{count} frames',
+    download: 'Download GIF'
   }
 }

@@ -1,11 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ImageCompressView from '../views/ImageCompressView.vue'
+import VideoCompressView from '../views/VideoCompressView.vue'
+import VideoToGifView from '../views/VideoToGifView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/image-compress',
+    name: 'image-compress',
+    component: ImageCompressView
+  },
+  {
+    path: '/video-compress',
+    name: 'video-compress',
+    component: VideoCompressView
+  },
+  {
+    path: '/video-to-gif',
+    name: 'video-to-gif',
+    component: VideoToGifView
   }
 ]
 

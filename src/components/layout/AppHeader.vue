@@ -1,25 +1,35 @@
 <template>
   <header class="app-header">
     <div class="header-container">
-      <!-- Logo -->
-      <div class="logo">
-        <el-icon class="logo-icon"><Picture /></el-icon>
-        <span class="logo-text">Imgoo</span>
-      </div>
-      
-      <!-- Desktop Navigation -->
-      <nav class="desktop-nav" v-if="isDesktop">
-        <el-menu mode="horizontal" :ellipsis="false">
-          <el-menu-item index="1">{{ $t('header.home') }}</el-menu-item>
-          <el-menu-item index="2">
-            <span class="nav-link" @click="scrollToTools">{{ $t('header.tools') }}</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <span class="nav-link" @click="scrollToContact">{{ $t('header.contact') }}</span>
-          </el-menu-item>
-        </el-menu>
-      </nav>
-      
+      <!-- Logo with Tool Dropdown -->
+      <el-dropdown @command="handleToolNavigate" trigger="click">
+        <div class="logo">
+          <el-icon class="logo-icon"><Picture /></el-icon>
+          <span class="logo-text">Imgoo</span>
+          <el-icon class="logo-arrow"><ArrowDown /></el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="/image-compress">
+              <el-icon><Picture /></el-icon>
+              {{ $t('tools.imageCompress.title') }}
+            </el-dropdown-item>
+            <el-dropdown-item command="/video-compress">
+              <el-icon><VideoCamera /></el-icon>
+              {{ $t('tools.videoCompress.title') }}
+            </el-dropdown-item>
+            <el-dropdown-item command="/video-to-gif">
+              <el-icon><MagicStick /></el-icon>
+              {{ $t('tools.videoToGif.title') }}
+            </el-dropdown-item>
+            <el-dropdown-item divided disabled>
+              <el-icon><MoreFilled /></el-icon>
+              {{ $t('workspace.moreComing') }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
       <!-- Right Side -->
       <div class="header-right">
         <!-- Language Switcher -->
@@ -35,77 +45,26 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        
-        <!-- Mobile Menu Button -->
-        <el-button 
-          v-if="isMobile" 
-          :icon="Menu" 
-          circle 
-          @click="mobileMenuVisible = true"
-          class="mobile-menu-btn"
-        />
       </div>
     </div>
-    
-    <!-- Mobile Drawer -->
-    <el-drawer v-model="mobileMenuVisible" direction="rtl" size="280px">
-      <template #header>
-        <div class="drawer-header">
-          <el-icon class="logo-icon"><Picture /></el-icon>
-          <span>Imgoo</span>
-        </div>
-      </template>
-      <el-menu>
-        <el-menu-item index="1">{{ $t('header.home') }}</el-menu-item>
-        <el-menu-item index="2" @click="scrollToToolsAndClose">{{ $t('header.tools') }}</el-menu-item>
-        <el-menu-item index="3" @click="scrollToContactAndClose">{{ $t('header.contact') }}</el-menu-item>
-      </el-menu>
-    </el-drawer>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { Picture, ArrowDown, VideoCamera, MagicStick, MoreFilled } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Picture, ArrowDown, Menu } from '@element-plus/icons-vue'
-import { useResponsive } from '@/composables/useResponsive'
 
+const router = useRouter()
 const { locale } = useI18n()
-const { isMobile, isDesktop } = useResponsive()
 
-const mobileMenuVisible = ref(false)
+const handleToolNavigate = (command) => {
+  router.push(command)
+}
 
 const handleLanguageChange = (command) => {
   locale.value = command
   localStorage.setItem('locale', command)
-}
-
-const scrollToContact = () => {
-  const contactSection = document.getElementById('contact-section')
-  if (contactSection) {
-    contactSection.scrollIntoView({ behavior: 'smooth' })
-  }
-}
-
-const scrollToTools = () => {
-  const toolsSection = document.getElementById('tools-section')
-  if (toolsSection) {
-    toolsSection.scrollIntoView({ behavior: 'smooth' })
-  }
-}
-
-const scrollToContactAndClose = () => {
-  mobileMenuVisible.value = false
-  setTimeout(() => {
-    scrollToContact()
-  }, 300)
-}
-
-const scrollToToolsAndClose = () => {
-  mobileMenuVisible.value = false
-  setTimeout(() => {
-    scrollToTools()
-  }, 300)
 }
 </script>
 
@@ -126,7 +85,7 @@ const scrollToToolsAndClose = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+
   @include mobile {
     padding: 0 16px;
   }
@@ -137,28 +96,35 @@ const scrollToToolsAndClose = () => {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $bg-light;
+  }
+
   .logo-icon {
     font-size: 24px;
     color: $primary;
   }
-  
+
   .logo-text {
     font-size: 20px;
     font-weight: 700;
     color: $text-primary;
   }
+
+  .logo-arrow {
+    font-size: 14px;
+    color: $text-muted;
+    transition: transform 0.2s;
+  }
 }
 
-.desktop-nav {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  
-  :deep(.el-menu) {
-    border-bottom: none;
-    background: transparent;
-  }
+// When dropdown is open, rotate arrow
+.el-dropdown:focus-within .logo-arrow {
+  transform: rotate(180deg);
 }
 
 .header-right {
@@ -177,29 +143,10 @@ const scrollToToolsAndClose = () => {
   padding: 8px 12px;
   border-radius: 8px;
   transition: all 0.3s;
-  
+
   &:hover {
     background: $bg-light;
     color: $text-primary;
-  }
-}
-
-.mobile-menu-btn {
-  @include desktop {
-    display: none;
-  }
-}
-
-.drawer-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 18px;
-  font-weight: 700;
-  
-  .logo-icon {
-    font-size: 24px;
-    color: $primary;
   }
 }
 </style>

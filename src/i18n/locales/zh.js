@@ -5,6 +5,12 @@ export default {
     about: '关于',
     contact: '联系我们'
   },
+  workspace: {
+    back: '返回首页',
+    comingSoon: '即将上线',
+    videoComingSoonDesc: '视频压缩功能正在开发中，敬请期待！',
+    moreComing: '更多工具即将上线...'
+  },
   hero: {
     tag: '多功能合一',
     title: '调整大小、压缩和转换图片',
@@ -41,6 +47,21 @@ export default {
   tools: {
     title: '强大的图片工具',
     subtitle: '优化图片所需的所有工具',
+    imageCompress: {
+      title: '图片压缩',
+      desc: '压缩图片文件大小，保持高质量',
+      action: '开始使用'
+    },
+    videoCompress: {
+      title: '视频压缩',
+      desc: '压缩视频文件，减小体积',
+      action: '开始使用'
+    },
+    videoToGif: {
+      title: '视频转 GIF',
+      desc: '将视频转换为 GIF 动图',
+      action: '开始使用'
+    },
     resize: {
       title: '调整图片大小',
       desc: '按像素或百分比更改图片尺寸',
@@ -125,7 +146,8 @@ export default {
     success: '成功',
     cancel: '取消',
     confirm: '确认',
-    close: '关闭'
+    close: '关闭',
+    remove: '移除'
   },
   contact: {
     title: '联系我们',
@@ -144,5 +166,39 @@ export default {
     success: '邮件发送成功',
     error: '邮件发送失败，请重试',
     alreadySubmitted: '今天已经发送过了，请明天再试'
+  },
+  videoToGif: {
+    title: '视频转 GIF',
+    step1: '上传视频',
+    step2: '预览与剪辑',
+    step3: '帧提取参数',
+    step4: '生成 GIF',
+    dropHint: '拖拽 MP4 视频到这里，或点击选择文件',
+    selectFile: '选择视频文件',
+    clipRange: '剪辑范围',
+    duration: '时长',
+    setStart: '设为起点',
+    setEnd: '设为终点',
+    playClip: '播放剪辑',
+    stopClip: '停止',
+    loop: '循环',
+    frameInterval: '帧间隔',
+    frameIntervalHint: '每 N 帧取一帧，值越大帧数越少',
+    gifQuality: 'GIF 质量',
+    gifQualityHint: '1-30，值越高质量越好',
+    outputWidth: '输出宽度',
+    frameDelay: '帧延迟',
+    estimate: '预计帧数',
+    framesCount: '帧',
+    extract: '提取帧',
+    extracting: '正在提取帧...',
+    framesTitle: '已提取帧（共 {count} 帧）',
+    clearAll: '清空全部',
+    generate: '生成 GIF',
+    generatingProgress: '正在生成 ({current}/{total})',
+    preview: 'GIF 预览',
+    resultInfo: '文件大小：{size}',
+    resultFrames: '共 {count} 帧',
+    download: '下载 GIF'
   }
 }
