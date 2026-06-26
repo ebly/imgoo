@@ -67,6 +67,11 @@ export default {
       desc: 'Add mosaic pixel effect to images',
       action: 'Get Started'
     },
+    imageRemoveBg: {
+      title: 'Remove Background',
+      desc: 'AI-powered background removal, change background color',
+      action: 'Get Started'
+    },
     resize: {
       title: 'Resize Image',
       desc: 'Change image dimensions by pixels or percentage',
@@ -171,6 +176,30 @@ export default {
     success: 'Email sent successfully',
     error: 'Failed to send email, please try again',
     alreadySubmitted: 'Already sent today, please try again tomorrow'
+  },
+  imageRemoveBg: {
+    uploadTitle: 'Upload Image',
+    dropHint: 'Drag & drop an image here, or click to select',
+    controlTitle: 'AI Remove Background',
+    removeBg: 'Remove Background',
+    removing: 'AI Processing...',
+    error: 'Processing failed, please try again',
+    restore: 'Restore Default View',
+    model: 'Model',
+    modelStandard: 'Standard',
+    modelSmall: 'Small (Fast)',
+    modelHq: 'High Quality',
+    outputFormat: 'Output Format',
+    bgColor: 'New Background',
+    transparent: 'Transparent',
+    solidBg: 'Solid Color',
+    opacity: 'Foreground Opacity',
+    progress: 'AI Processing...',
+    previewTitle: 'Preview Comparison',
+    resultPreview: 'Result',
+    clickToRemove: 'Click "Remove Background" for AI auto-processing',
+    download: 'Download (PNG)',
+    rechoose: 'Re-choose'
   },
   imagePixelate: {
     uploadTitle: 'Upload Image',

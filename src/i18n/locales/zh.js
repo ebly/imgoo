@@ -67,6 +67,11 @@ export default {
       desc: '为图片添加马赛克像素效果',
       action: '开始使用'
     },
+    imageRemoveBg: {
+      title: '图片去背景',
+      desc: 'AI 一键去除图片背景，支持换背景色',
+      action: '开始使用'
+    },
     resize: {
       title: '调整图片大小',
       desc: '按像素或百分比更改图片尺寸',
@@ -171,6 +176,30 @@ export default {
     success: '邮件发送成功',
     error: '邮件发送失败，请重试',
     alreadySubmitted: '今天已经发送过了，请明天再试'
+  },
+  imageRemoveBg: {
+    uploadTitle: '上传图片',
+    dropHint: '拖拽图片到这里，或点击选择文件',
+    controlTitle: 'AI 去背景',
+    removeBg: '去除背景',
+    removing: 'AI 正在处理...',
+    error: '处理失败，请重试',
+    restore: '恢复默认显示',
+    model: '模型',
+    modelStandard: '标准模型',
+    modelSmall: '小模型（快速）',
+    modelHq: '高精度模型',
+    outputFormat: '输出格式',
+    bgColor: '新背景色',
+    transparent: '透明',
+    solidBg: '实色背景',
+    opacity: '前景透明度',
+    progress: 'AI 处理进度...',
+    previewTitle: '预览对比',
+    resultPreview: '处理结果',
+    clickToRemove: '点击"去除背景"使用 AI 自动处理',
+    download: '下载图片（PNG）',
+    rechoose: '重新选择'
   },
   imagePixelate: {
     uploadTitle: '上传图片',

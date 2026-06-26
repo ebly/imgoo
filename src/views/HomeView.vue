@@ -25,7 +25,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Picture, VideoCamera, MagicStick, Grid } from '@element-plus/icons-vue'
+import { Picture, VideoCamera, MagicStick, Grid, Scissor } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -62,6 +62,14 @@ const tools = [
     desc: t('tools.imagePixelate.desc'),
     action: t('tools.imagePixelate.action'),
     route: '/image-pixelate'
+  },
+  {
+    key: 'image-remove-bg',
+    icon: Scissor,
+    title: t('tools.imageRemoveBg.title'),
+    desc: t('tools.imageRemoveBg.desc'),
+    action: t('tools.imageRemoveBg.action'),
+    route: '/image-remove-bg'
   }
 ]
 
