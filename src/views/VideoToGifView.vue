@@ -163,17 +163,42 @@
       <!-- 帧列表 -->
       <el-card v-if="frames.length > 0" class="section-card" shadow="never">
         <template #header>
-          <span class="section-title">
-            <el-icon><Grid /></el-icon>
-            {{ $t('videoToGif.framesTitle', { count: frames.length }) }}
-          </span>
+          <div class="frames-header">
+            <span class="section-title">
+              <el-icon><Grid /></el-icon>
+              {{ $t('videoToGif.framesTitle', { count: frames.length }) }}
+            </span>
+            <div class="frames-header-controls">
+              <div class="frames-loop-control">
+                <span class="loop-label">{{ $t('videoToGif.framesLoop') }}</span>
+                <el-switch v-model="framesLoop" size="small" />
+              </div>
+              <el-button
+                :type="isPlayingFrames ? 'warning' : 'primary'"
+                size="small"
+                :icon="isPlayingFrames ? SwitchIcon : VideoPlay"
+                :disabled="frames.length === 0"
+                @click="toggleFramePlay"
+              >
+                {{ isPlayingFrames ? $t('videoToGif.stopFrames') : $t('videoToGif.playFrames') }}
+              </el-button>
+            </div>
+          </div>
         </template>
 
-        <div class="frames-grid" v-if="frames.length > 0">
+        <div v-if="isPlayingFrames" class="frame-preview">
+          <img :src="frames[currentFrameIndex]?.dataUrl" :alt="'Frame ' + (currentFrameIndex + 1)" />
+          <div class="frame-preview-overlay">
+            <span class="frame-counter">{{ currentFrameIndex + 1 }} / {{ frames.length }}</span>
+          </div>
+        </div>
+
+        <div class="frames-grid">
           <div
             v-for="(frame, index) in frames"
             :key="index"
             class="frame-item"
+            :class="{ 'is-current': isPlayingFrames && index === currentFrameIndex }"
             @mouseenter="frame.hover = true"
             @mouseleave="frame.hover = false"
           >
@@ -187,7 +212,7 @@
           </div>
         </div>
 
-        <div v-if="frames.length > 0" class="frames-actions">
+        <div class="frames-actions">
           <el-button type="danger" size="small" text @click="clearAllFrames">
             <el-icon><Delete /></el-icon>
             {{ $t('videoToGif.clearAll') }}
@@ -195,7 +220,7 @@
         </div>
       </el-card>
 
-      <!-- 生成 GIF -->
+      <!-- 生成 GIF / SpriteSheet -->
       <el-card v-if="frames.length > 0" class="section-card" shadow="never">
         <template #header>
           <span class="section-title">
@@ -204,20 +229,53 @@
           </span>
         </template>
 
-        <el-button
-          type="success"
-          size="large"
-          :loading="generating"
-          :disabled="generating || frames.length === 0"
-          @click="generateGif"
-          class="generate-btn"
-        >
-          <el-icon><MagicStick /></el-icon>
-          {{ generating ? $t('videoToGif.generatingProgress', { current: generateProgress, total: frames.length }) : $t('videoToGif.generate') }}
-        </el-button>
+        <!-- SpriteSheet 参数 -->
+        <div class="sprite-sheet-params">
+          <div class="param-item">
+            <label>{{ $t('videoToGif.spriteSheetColumns') }}</label>
+            <el-input-number v-model="spritesheetColumns" :min="0" :max="20" :step="1" size="small" />
+          </div>
+          <div class="param-item">
+            <label>{{ $t('videoToGif.spriteSheetPadding') }}</label>
+            <el-input-number v-model="spritesheetPadding" :min="0" :max="20" :step="1" size="small">
+              <template #suffix>px</template>
+            </el-input-number>
+          </div>
+        </div>
+
+        <!-- 两个生成按钮 -->
+        <div class="generate-actions">
+          <el-button
+            type="success"
+            size="large"
+            :loading="generating"
+            :disabled="generating || generatingSS || frames.length === 0"
+            @click="generateGif"
+            class="generate-btn"
+          >
+            <el-icon><MagicStick /></el-icon>
+            {{ generating ? $t('videoToGif.generatingProgress', { current: generateProgress, total: frames.length }) : $t('videoToGif.generate') }}
+          </el-button>
+
+          <el-button
+            type="warning"
+            size="large"
+            :loading="generatingSS"
+            :disabled="generating || generatingSS || frames.length === 0"
+            @click="generateSpriteSheet"
+            class="generate-btn"
+          >
+            <el-icon><Grid /></el-icon>
+            {{ generatingSS ? $t('videoToGif.generatingSpriteSheet', { current: ssProgress, total: frames.length }) : $t('videoToGif.generateSpriteSheet') }}
+          </el-button>
+        </div>
 
         <div v-if="generateProgress > 0" class="progress-bar-wrapper">
           <el-progress :percentage="Math.round((generateProgress / frames.length) * 100)" :stroke-width="12" />
+        </div>
+
+        <div v-if="ssProgress > 0 && generatingSS" class="progress-bar-wrapper">
+          <el-progress :percentage="Math.round((ssProgress / frames.length) * 100)" :stroke-width="12" />
         </div>
       </el-card>
 
@@ -241,6 +299,29 @@
           <el-button type="primary" size="large" @click="downloadGif">
             <el-icon><Download /></el-icon>
             {{ $t('videoToGif.download') }}
+          </el-button>
+        </div>
+      </el-card>
+
+      <!-- SpriteSheet 预览与下载 -->
+      <el-card v-if="ssResultUrl" class="section-card" shadow="never">
+        <template #header>
+          <span class="section-title">
+            <el-icon><Grid /></el-icon>
+            {{ $t('videoToGif.spriteSheetPreview') }}
+          </span>
+        </template>
+
+        <div class="gif-result">
+          <div class="gif-preview">
+            <img :src="ssResultUrl" alt="SpriteSheet" />
+          </div>
+          <div class="gif-info">
+            <p>{{ $t('videoToGif.spriteSheetResultInfo', { size: formatSize(ssResultSize), frames: frames.length, cols: ssCols, rows: ssRows }) }}</p>
+          </div>
+          <el-button type="primary" size="large" @click="downloadSpriteSheet">
+            <el-icon><Download /></el-icon>
+            {{ $t('videoToGif.downloadSpriteSheet') }}
           </el-button>
         </div>
       </el-card>
@@ -299,6 +380,10 @@ const resetVideo = () => {
   frames.value = []
   gifResultUrl.value = ''
   gifResultSize.value = 0
+  ssResultUrl.value = ''
+  ssResultSize.value = 0
+  ssCols.value = 0
+  ssRows.value = 0
 }
 
 // --- 视频预览 ---
@@ -389,6 +474,10 @@ const frameInterval = ref(2)
 const gifQuality = ref(10)
 const outputWidth = ref(320)
 const frameDelay = ref(100)
+
+// --- SpriteSheet 参数 ---
+const spritesheetColumns = ref(0)
+const spritesheetPadding = ref(2)
 
 const estimatedFrames = computed(() => {
   if (!videoDuration.value) return 0
@@ -485,17 +574,94 @@ const extractFrames = async () => {
 
 const removeFrame = (index) => {
   frames.value.splice(index, 1)
+  // 如果正在播放，修正当前索引
+  if (isPlayingFrames.value) {
+    if (index < currentFrameIndex.value) {
+      currentFrameIndex.value--
+    } else if (index === currentFrameIndex.value) {
+      currentFrameIndex.value = Math.min(currentFrameIndex.value, frames.value.length - 1)
+    }
+  }
+  if (frames.value.length === 0 && isPlayingFrames.value) {
+    stopFramePlay()
+  }
 }
 
 const clearAllFrames = () => {
   frames.value = []
+  stopFramePlay()
 }
+
+// --- 帧预览播放 ---
+const isPlayingFrames = ref(false)
+const framesLoop = ref(true)
+const currentFrameIndex = ref(0)
+let framesPlayTimer = null
+
+const toggleFramePlay = () => {
+  if (isPlayingFrames.value) {
+    stopFramePlay()
+  } else {
+    startFramePlay()
+  }
+}
+
+const startFramePlay = () => {
+  if (frames.value.length === 0) return
+  if (currentFrameIndex.value >= frames.value.length) {
+    currentFrameIndex.value = 0
+  }
+  isPlayingFrames.value = true
+  scheduleNextFrame()
+}
+
+const stopFramePlay = () => {
+  isPlayingFrames.value = false
+  if (framesPlayTimer) {
+    clearTimeout(framesPlayTimer)
+    framesPlayTimer = null
+  }
+}
+
+const scheduleNextFrame = () => {
+  if (!isPlayingFrames.value) return
+  const next = currentFrameIndex.value + 1
+  if (next >= frames.value.length) {
+    if (framesLoop.value) {
+      currentFrameIndex.value = 0
+    } else {
+      stopFramePlay()
+      return
+    }
+  } else {
+    currentFrameIndex.value = next
+  }
+  framesPlayTimer = setTimeout(scheduleNextFrame, frameDelay.value)
+}
+
+// 当 frameDelay 变化时重新调度（如果在播放中）
+watch(frameDelay, () => {
+  if (isPlayingFrames.value) {
+    if (framesPlayTimer) {
+      clearTimeout(framesPlayTimer)
+    }
+    scheduleNextFrame()
+  }
+})
 
 // --- GIF 生成 ---
 const generating = ref(false)
 const generateProgress = ref(0)
 const gifResultUrl = ref('')
 const gifResultSize = ref(0)
+
+// --- SpriteSheet 状态 ---
+const generatingSS = ref(false)
+const ssProgress = ref(0)
+const ssResultUrl = ref('')
+const ssResultSize = ref(0)
+const ssCols = ref(0)
+const ssRows = ref(0)
 
 const generateGif = () => {
   if (frames.value.length === 0) return
@@ -563,6 +729,85 @@ const downloadGif = () => {
   const a = document.createElement('a')
   a.href = gifResultUrl.value
   a.download = (videoFile.value?.name?.replace(/\.[^.]+$/, '') || 'output') + '.gif'
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+}
+
+// --- SpriteSheet 生成 ---
+const generateSpriteSheet = async () => {
+  if (frames.value.length === 0) return
+
+  generatingSS.value = true
+  ssProgress.value = 0
+
+  // 获取第一帧尺寸
+  const firstImg = new Image()
+  firstImg.src = frames.value[0].dataUrl
+  await new Promise((resolve, reject) => {
+    firstImg.onload = resolve
+    firstImg.onerror = reject
+  })
+
+  const frameW = firstImg.naturalWidth
+  const frameH = firstImg.naturalHeight
+  const totalFrames = frames.value.length
+  const padding = spritesheetPadding.value
+  let cols = spritesheetColumns.value
+
+  if (cols <= 0) cols = totalFrames // 水平条带
+
+  const rows = Math.ceil(totalFrames / cols)
+  ssCols.value = cols
+  ssRows.value = rows
+
+  const canvasW = cols * (frameW + padding) + padding
+  const canvasH = rows * (frameH + padding) + padding
+
+  const canvas = document.createElement('canvas')
+  canvas.width = canvasW
+  canvas.height = canvasH
+  const ctx = canvas.getContext('2d')
+
+  // 透明背景
+  ctx.clearRect(0, 0, canvasW, canvasH)
+
+  // 逐帧绘制
+  for (let i = 0; i < totalFrames; i++) {
+    if (!generatingSS.value) break
+    const img = new Image()
+    img.src = frames.value[i].dataUrl
+    await new Promise((resolve, reject) => {
+      img.onload = resolve
+      img.onerror = reject
+    })
+
+    const col = i % cols
+    const row = Math.floor(i / cols)
+    const x = padding + col * (frameW + padding)
+    const y = padding + row * (frameH + padding)
+    ctx.drawImage(img, x, y, frameW, frameH)
+
+    ssProgress.value = i + 1
+    if (i % 5 === 0) await nextTick()
+  }
+
+  // 导出 PNG blob
+  const blob = await new Promise((resolve) => {
+    canvas.toBlob((b) => resolve(b), 'image/png')
+  })
+
+  ssResultSize.value = blob.size
+  if (ssResultUrl.value) URL.revokeObjectURL(ssResultUrl.value)
+  ssResultUrl.value = URL.createObjectURL(blob)
+  generatingSS.value = false
+}
+
+const downloadSpriteSheet = () => {
+  if (!ssResultUrl.value) return
+  const a = document.createElement('a')
+  a.href = ssResultUrl.value
+  a.download = (videoFile.value?.name?.replace(/\.[^.]+$/, '') || 'output') + '_spritesheet.png'
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)
@@ -805,6 +1050,67 @@ const formatTime = (seconds) => {
 }
 
 // 帧列表
+.frames-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+
+  .frames-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .frames-loop-control {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .loop-label {
+        font-size: 12px;
+        color: $text-muted;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+// 帧预览区域
+.frame-preview {
+  position: relative;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid $primary;
+  background: #000;
+
+  img {
+    width: 100%;
+    max-height: 360px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .frame-preview-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 24px 12px 8px;
+    text-align: center;
+
+    .frame-counter {
+      font-size: 13px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2px 10px;
+      border-radius: 10px;
+    }
+  }
+}
+
 .frames-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -818,6 +1124,11 @@ const formatTime = (seconds) => {
   overflow: hidden;
   border: 1px solid $border-light;
   cursor: default;
+
+  &.is-current {
+    border-color: $primary;
+    box-shadow: 0 0 0 2px rgba($primary, 0.3);
+  }
 
   img {
     width: 100%;
@@ -870,9 +1181,44 @@ const formatTime = (seconds) => {
   text-align: right;
 }
 
-// 生成按钮
-.generate-btn {
-  width: 100%;
+// SpriteSheet 参数
+.sprite-sheet-params {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .param-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+
+    label {
+      font-size: 13px;
+      color: $text-secondary;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+  }
+}
+
+// 生成按钮容器
+.generate-actions {
+  display: flex;
+  gap: 12px;
+
+  @include mobile {
+    flex-direction: column;
+  }
+
+  .generate-btn {
+    flex: 1;
+  }
 }
 
 .progress-bar-wrapper {
