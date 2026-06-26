@@ -1,10 +1,7 @@
 <template>
   <div class="video-compress-view">
     <div class="page-header">
-      <el-button text @click="goBack" class="back-btn">
-        <el-icon><ArrowLeft /></el-icon>
-        {{ $t('workspace.back') }}
-      </el-button>
+      <el-icon class="page-header-icon"><VideoCamera /></el-icon>
       <h2 class="page-title">{{ $t('tools.videoCompress.title') }}</h2>
     </div>
     <div class="coming-soon">
@@ -16,11 +13,7 @@
 </template>
 
 <script setup>
-import { ArrowLeft, VideoCamera } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const goBack = () => router.push('/')
+import { VideoCamera } from '@element-plus/icons-vue'
 </script>
 
 <style scoped lang="scss">
@@ -40,20 +33,16 @@ const goBack = () => router.push('/')
     gap: 12px;
     margin-bottom: 24px;
 
-    .back-btn {
-      font-size: 14px;
-      color: $text-secondary;
-
-      &:hover {
-        color: $primary;
-      }
-    }
-
     .page-title {
       font-size: 20px;
       font-weight: 600;
       color: $text-primary;
       margin: 0;
+    }
+
+    .page-header-icon {
+      font-size: 22px;
+      color: $primary;
     }
   }
 

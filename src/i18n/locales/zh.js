@@ -62,6 +62,11 @@ export default {
       desc: '将视频转换为 GIF 动图',
       action: '开始使用'
     },
+    imagePixelate: {
+      title: '图片像素化',
+      desc: '为图片添加马赛克像素效果',
+      action: '开始使用'
+    },
     resize: {
       title: '调整图片大小',
       desc: '按像素或百分比更改图片尺寸',
@@ -166,6 +171,25 @@ export default {
     success: '邮件发送成功',
     error: '邮件发送失败，请重试',
     alreadySubmitted: '今天已经发送过了，请明天再试'
+  },
+  imagePixelate: {
+    uploadTitle: '上传图片',
+    dropHint: '拖拽图片到这里，或点击选择文件',
+    controlTitle: '像素化参数',
+    pixelSize: '像素块大小',
+    showGrid: '显示网格线',
+    previewTitle: '预览对比',
+    pixelated: '像素化效果',
+    blocks: '块',
+    download: '下载像素化图片',
+    rechoose: '重新选择',
+    editTitle: '编辑像素',
+    eyedropper: '吸色',
+    paint: '上色',
+    currentColor: '当前颜色',
+    resetEdits: '重置编辑',
+    eyedropperHint: '点击像素块吸取该块颜色',
+    paintHint: '点击像素块用当前颜色填充该块'
   },
   videoToGif: {
     title: '视频转 GIF',

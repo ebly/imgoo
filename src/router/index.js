@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ImageCompressView from '../views/ImageCompressView.vue'
 import VideoCompressView from '../views/VideoCompressView.vue'
 import VideoToGifView from '../views/VideoToGifView.vue'
+import ImagePixelateView from '../views/ImagePixelateView.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/video-to-gif',
     name: 'video-to-gif',
     component: VideoToGifView
+  },
+  {
+    path: '/image-pixelate',
+    name: 'image-pixelate',
+    component: ImagePixelateView
   }
 ]
 

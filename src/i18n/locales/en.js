@@ -62,6 +62,11 @@ export default {
       desc: 'Convert video to animated GIF',
       action: 'Get Started'
     },
+    imagePixelate: {
+      title: 'Image Pixelate',
+      desc: 'Add mosaic pixel effect to images',
+      action: 'Get Started'
+    },
     resize: {
       title: 'Resize Image',
       desc: 'Change image dimensions by pixels or percentage',
@@ -166,6 +171,25 @@ export default {
     success: 'Email sent successfully',
     error: 'Failed to send email, please try again',
     alreadySubmitted: 'Already sent today, please try again tomorrow'
+  },
+  imagePixelate: {
+    uploadTitle: 'Upload Image',
+    dropHint: 'Drag & drop an image here, or click to select',
+    controlTitle: 'Pixelation Settings',
+    pixelSize: 'Pixel Block Size',
+    showGrid: 'Show Grid Lines',
+    previewTitle: 'Preview Comparison',
+    pixelated: 'Pixelated',
+    blocks: 'blocks',
+    download: 'Download Pixelated Image',
+    rechoose: 'Re-choose',
+    editTitle: 'Edit Pixels',
+    eyedropper: 'Eyedropper',
+    paint: 'Paint',
+    currentColor: 'Current Color',
+    resetEdits: 'Reset Edits',
+    eyedropperHint: 'Click a pixel block to pick up its color',
+    paintHint: 'Click a pixel block to fill it with current color'
   },
   videoToGif: {
     title: 'Video to GIF',

@@ -3,10 +3,7 @@
     <div class="page-container">
       <!-- 页面标题 -->
       <div class="page-header">
-        <el-button @click="$router.push('/')" text>
-          <el-icon><ArrowLeft /></el-icon>
-          {{ $t('workspace.back') }}
-        </el-button>
+        <el-icon class="page-header-icon"><MagicStick /></el-icon>
         <h2>{{ $t('videoToGif.title') }}</h2>
       </div>
 
@@ -334,7 +331,7 @@ import { ref, computed, nextTick, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GIF from 'gif.js'
 import {
-  ArrowLeft, Upload, VideoCamera, VideoPlay,
+  Upload, VideoCamera, VideoPlay,
   Setting, Grid, MagicStick, PictureFilled,
   Download, Delete, CircleCheckFilled, VideoCameraFilled,
   Switch as SwitchIcon
@@ -855,6 +852,11 @@ const formatTime = (seconds) => {
     margin: 0;
     font-size: 20px;
     color: $text-primary;
+  }
+
+  .page-header-icon {
+    font-size: 22px;
+    color: $primary;
   }
 }
 

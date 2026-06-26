@@ -22,6 +22,10 @@
               <el-icon><MagicStick /></el-icon>
               {{ $t('tools.videoToGif.title') }}
             </el-dropdown-item>
+            <el-dropdown-item command="/image-pixelate">
+              <el-icon><MoreFilled /></el-icon>
+              {{ $t('tools.imagePixelate.title') }}
+            </el-dropdown-item>
             <el-dropdown-item divided disabled>
               <el-icon><MoreFilled /></el-icon>
               {{ $t('workspace.moreComing') }}
@@ -29,6 +33,17 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+
+      <!-- Back to Home (only on tool pages) -->
+      <el-button
+        v-if="route.name !== 'home'"
+        text
+        @click="$router.push('/')"
+        class="back-btn"
+      >
+        <el-icon><ArrowLeft /></el-icon>
+        {{ $t('workspace.back') }}
+      </el-button>
 
       <!-- Right Side -->
       <div class="header-right">
@@ -51,11 +66,12 @@
 </template>
 
 <script setup>
-import { Picture, ArrowDown, VideoCamera, MagicStick, MoreFilled } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
+import { Picture, ArrowDown, ArrowLeft, VideoCamera, MagicStick, MoreFilled } from '@element-plus/icons-vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
+const route = useRoute()
 const { locale } = useI18n()
 
 const handleToolNavigate = (command) => {
@@ -131,6 +147,15 @@ const handleLanguageChange = (command) => {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.back-btn {
+  font-size: 14px;
+  color: $text-secondary;
+
+  &:hover {
+    color: $primary;
+  }
 }
 
 .language-switcher {

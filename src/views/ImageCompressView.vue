@@ -1,10 +1,7 @@
 <template>
   <div class="image-compress-view">
     <div class="page-header">
-      <el-button text @click="goBack" class="back-btn">
-        <el-icon><ArrowLeft /></el-icon>
-        {{ $t('workspace.back') }}
-      </el-button>
+      <el-icon class="page-header-icon"><Picture /></el-icon>
       <h2 class="page-title">{{ $t('tools.imageCompress.title') }}</h2>
     </div>
     <BatchSummary />
@@ -12,12 +9,8 @@
 </template>
 
 <script setup>
-import { ArrowLeft } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
+import { Picture } from '@element-plus/icons-vue'
 import BatchSummary from '@/components/common/BatchSummary.vue'
-
-const router = useRouter()
-const goBack = () => router.push('/')
 </script>
 
 <style scoped lang="scss">
@@ -37,20 +30,16 @@ const goBack = () => router.push('/')
     gap: 12px;
     margin-bottom: 24px;
 
-    .back-btn {
-      font-size: 14px;
-      color: $text-secondary;
-
-      &:hover {
-        color: $primary;
-      }
-    }
-
     .page-title {
       font-size: 20px;
       font-weight: 600;
       color: $text-primary;
       margin: 0;
+    }
+
+    .page-header-icon {
+      font-size: 22px;
+      color: $primary;
     }
   }
 }

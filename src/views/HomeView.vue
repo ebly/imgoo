@@ -25,7 +25,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Picture, VideoCamera, MagicStick } from '@element-plus/icons-vue'
+import { Picture, VideoCamera, MagicStick, Grid } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -54,6 +54,14 @@ const tools = [
     desc: t('tools.videoToGif.desc'),
     action: t('tools.videoToGif.action'),
     route: '/video-to-gif'
+  },
+  {
+    key: 'image-pixelate',
+    icon: Grid,
+    title: t('tools.imagePixelate.title'),
+    desc: t('tools.imagePixelate.desc'),
+    action: t('tools.imagePixelate.action'),
+    route: '/image-pixelate'
   }
 ]
 
