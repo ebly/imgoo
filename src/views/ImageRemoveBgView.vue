@@ -46,7 +46,6 @@
               <el-select v-model="modelFile" size="small" style="width: 260px">
                 <el-option label="RMBG-1.4 量化 (44MB)" value="model_quantized.onnx" />
                 <el-option label="RMBG-1.4 FP16 (88MB)" value="model_fp16.onnx" />
-                <el-option label="RMBG-1.4 FP32 (176MB)" value="model.onnx" />
               </el-select>
             </div>
           </div>
@@ -213,7 +212,7 @@ async function removeBgAction() {
         ortSession = null
       }
       lastModelFile = modelFile.value
-      progressText.value = `加载 ${modelFile.value} (${modelFile.value === 'model.onnx' ? '176' : modelFile.value === 'model_fp16.onnx' ? '88' : '44'}MB)...`
+      progressText.value = `加载 ${modelFile.value} (${modelFile.value === 'model_fp16.onnx' ? '88' : '44'}MB)...`
       console.time('load-model')
       const resp = await fetch(modelPath)
       if (!resp.ok) throw new Error(`模型文件 ${modelFile.value} 未找到`)
